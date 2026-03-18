@@ -1,3 +1,4 @@
+let intentosDisponibles = 5;
 // Aqui seleccionamos los 4 elementos (code-input) que estan en el html
 const selects = document.querySelectorAll('.code-input');
 
@@ -38,7 +39,6 @@ function logTerminal(missatge, tipus = '') {
 // Mensaje de prueba para ver que todo funciona
 logTerminal("SISTEMA OPERATIVO INICIALIZADO", "success");
 
-
 // PASO 3: Programar el botón de envío
 
 //Aqui lo que hago es que buscamos el botón en el HTML por su id 
@@ -56,7 +56,26 @@ botonEnviar.addEventListener('click', () => {
     // aqui tomanos la lista de num. y con .join('-') sirve para que los números se vean así: 1-2-3-4
     logTerminal("Código enviado: " + intentActual.join('-'));
 
-    // NOTA PARA EL FUTURO:
-    // Aquí es donde llamaremos a la lógica de tu compañero (Estudiante B)
-    // para saber si el código es correcto o no.
+    //PASO 4: Gestión de los intentos (Actualización visual) ---
+
+    // Aqui restamos uno al contador de intentos cada vez que se hace clic
+    intentosDisponibles--; 
+
+    // BUSCAMOS el 5 del HTML y lo cambiamos por el nuevo número (4, 3, 2...) es decir que va ir reduciendose el num de instentos 
+    const spanRondes = document.getElementById('rondes-restants');
+    if (spanRondes) {
+        spanRondes.innerText = intentosDisponibles; // el .innerText controla el texto que hay dentro de la etiqueta html 
+    }
+
+    // Reutilizo la funcion que creamos en el paso 2 e informamos por la terminal cuántas vidas quedan
+    logTerminal("Te quedan " + intentosDisponibles + " intentos.");
+
+    // agregamos una condicion donde  si el jugador ha perdido (llega a 0)
+    if (intentosDisponibles === 0) {
+        logTerminal("GAME OVER: Te has quedado sin intentos.", "error");
+        
+        // Bloqueamos el botón para que no pueda seguir pulsando
+        botonEnviar.disabled = true;
+        botonEnviar.innerText = "BLOQUEADO";
+    }
 });
