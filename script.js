@@ -37,3 +37,26 @@ function logTerminal(missatge, tipus = '') {
 
 // Mensaje de prueba para ver que todo funciona
 logTerminal("SISTEMA OPERATIVO INICIALIZADO", "success");
+
+
+// PASO 3: Programar el botón de envío
+
+//Aqui lo que hago es que buscamos el botón en el HTML por su id 
+const botonEnviar = document.getElementById('btn-enviar');
+
+// aqui le decimos qué hacer cuando alguien haga clic en el boton
+botonEnviar.addEventListener('click', () => {
+    
+    // Aqui leemos los 4 selects y guardamos sus valores en un Array
+    // Usamos parseInt para que el ordenador sepa que son NÚMEROS y no texto
+    // Uso el .map que no lo hemos visto en clase pero es como una orden para recorrer la lista 
+    // He usado el como abreviatura de elemento para indicar que el .map está recorriendo cada uno de los elementos de la lista.
+    const intentActual = Array.from(selects).map(el => parseInt(el.value));
+
+    // aqui tomanos la lista de num. y con .join('-') sirve para que los números se vean así: 1-2-3-4
+    logTerminal("Código enviado: " + intentActual.join('-'));
+
+    // NOTA PARA EL FUTURO:
+    // Aquí es donde llamaremos a la lógica de tu compañero (Estudiante B)
+    // para saber si el código es correcto o no.
+});
