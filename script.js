@@ -52,3 +52,24 @@ function validarIntento(intentoUsuario, codigoSecreto) {
 //console.log(validarIntento([1, 2, 3, 4], [1, 2, 3, 4])); console.log de prueba de consola para ver si funciona.
 
 
+// FUNCIÓN 3: Comprobación de final de juego
+function comprobarFinDeJuego(pistas, intentosRestantes) {
+    // Comprobamos si el jugador ha ganado
+    // .every() recorre el array y comprueba que TODOS los elementos cumplan la condición
+    // Si los 4 elementos son '1' significa que acertó todo → victoria
+    const hasGanado = pistas.every(pista => pista === '1');
+    if (hasGanado) {
+        return 'victoria';
+    }
+    // Si no ha ganado comprobamos si le quedan intentos
+    // Si intentosRestantes llega a 0 → derrota
+    if (intentosRestantes === 0) {
+        return 'derrota';
+    }
+    // Si no ha ganado y todavía le quedan intentos → el juego continúa
+    return 'continuar';
+}
+// Prueba para verificar que funciona
+//console.log(comprobarFinDeJuego(['1','1','1','1'], 3)); // esperado: 'victoria'
+//console.log(comprobarFinDeJuego(['1','Ø','×','1'], 0)); // esperado: 'derrota'
+//console.log(comprobarFinDeJuego(['1','Ø','×','1'], 2)); // esperado: 'continuar'
