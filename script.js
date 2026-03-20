@@ -1,6 +1,6 @@
 //PARTE CARLOS (feature-ui-logic)
-const MAX_INTENTOS = 5;
-let intentosDisponibles = MAX_INTENTOS;
+
+let intentosDisponibles = 5;
 // Seleccionamos los 4 elementos (code-input) que estan en el html
 const selects = document.querySelectorAll('.code-input');
 // Recorremos cada selector para añadirle las opciones del 0 al 9
@@ -93,34 +93,35 @@ const codigoSecreto = generarCodigoAleatorio();
 //console.log("Codigo secreto:", codigoSecreto);
 
 // FUNCIÓN 2: Algoritmo de validación (dos pasadas)
-function validarIntento(intentoUsuario, codigoSecreto) {
+function validarIntento(intentoUsuario, codigoSecretoParametro) {
     const pistas = [];
-    const codigoPendiente = [];
-    const intentoPendiente = [];
+    const codigoPendiente = [...codigoSecretoParametro]; // copia del código secreto
+    const intentoPendiente = [...intentoUsuario];        // copia del intento
+
     // PRIMERA PASADA: buscar posiciones correctas (1)
     for (let i = 0; i < 4; i++) {
-        if (intentoUsuario[i] === codigoSecreto[i]) {
+        if (intentoPendiente[i] === codigoPendiente[i]) {
             pistas.push('1');
-            codigoPendiente.push(null);
-            intentoPendiente.push(null);
-        } else {
-            codigoPendiente.push(codigoSecreto[i]);
-            intentoPendiente.push(intentoUsuario[i]);
+            codigoPendiente[i] = -1;  // tachamos con -1, nunca será un dígito válido
+            intentoPendiente[i] = -1;
         }
     }
     // SEGUNDA PASADA: buscar números correctos mal colocados (Ø)
     for (let i = 0; i < 4; i++) {
-        if (intentoPendiente[i] === null) continue;
+        if (intentoPendiente[i] === -1) continue;
         const pos = codigoPendiente.indexOf(intentoPendiente[i]);
         if (pos !== -1) {
             pistas.push('Ø');
-            codigoPendiente[pos] = null;
+            codigoPendiente[pos] = -1;
         } else {
             pistas.push('×');
         }
     }
     return pistas;
 }
+//hemos arreglado dos bugs 1 que se cruzaba el nombre de la variable codigoSecreto con el nombre de parametro que se llamaba igual dando pistas erroneas.
+//Y el segundo bug era que al poner null en vez de un valor que estuviera fuera del rango de 0-9, el algoritmo se confundía y daba pistas erróneas.
+//Ahora con -1 ya no hay confusión porque nunca será un valor válido para el juego.
 // FUNCIÓN 3: Comprobación de final de juego
 function comprobarFinDeJuego(pistas, intentosRestantes) {
     const haGanado = pistas.every(pista => pista === '1');
