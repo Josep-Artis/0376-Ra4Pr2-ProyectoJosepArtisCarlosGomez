@@ -35,9 +35,9 @@ botonEnviar.addEventListener('click', () => {
         spanRondes.innerText = intentosDisponibles;
     }
     // Llamamos a la función de conexión (parte Josep)
-    executarIntento(intentActual);
+    validarIntento(intentActual, codigoSecreto);
     logTerminal("Te quedan " + intentosDisponibles + " intentos.");
-    if (intentosDisponibles === 0) {
+    if (intentosDisponibles === 0) { ////////
         botonEnviar.disabled = true;
         botonEnviar.innerText = "BLOQUEADO";
     }
