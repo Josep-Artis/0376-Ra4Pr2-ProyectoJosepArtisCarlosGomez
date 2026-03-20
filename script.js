@@ -7,7 +7,7 @@ const selects = document.querySelectorAll('.code-input');
 selects.forEach(select => {
     for (let i = 0; i <= 9; i++) {
         const opt = document.createElement('option');
-        opt.value = i;     
+        opt.value = i;      
         opt.textContent = i; 
         select.appendChild(opt); 
     }
@@ -26,22 +26,47 @@ function logTerminal(missatge, tipus = '') {
 }
 logTerminal("SISTEMA OPERATIVO INICIALIZADO", "success");
 const botonEnviar = document.getElementById('btn-enviar');
+
+// aqui le decimos qué hacer cuando alguien haga clic en el boton
 botonEnviar.addEventListener('click', () => {
+    // Aqui leemos los 4 selects y guardamos sus valores en un Array
     const intentActual = Array.from(selects).map(el => parseInt(el.value));
     logTerminal("Código enviado: " + intentActual.join('-'));
+
+    // CORRECCIÓN AQUÍ: Guardamos las pistas que genera Josep ---
+    const pistasActuales = validarIntento(intentActual, codigoSecreto);
+    // MAqui mostramos las pistas (1, Ø, ×) en la terminal
+    logTerminal("Pistas: " + pistasActuales.join(' '));
+
+    // Aqui restamos uno al contador de intentos cada vez que se hace clic
     intentosDisponibles--;
+    
+    // BUSCAMOS el 5 del HTML y lo cambiamos por el nuevo número
     const spanRondes = document.getElementById('rondes-restants');
     if (spanRondes) {
         spanRondes.innerText = intentosDisponibles;
     }
-    // Llamamos a la función de conexión (parte Josep)
-    validarIntento(intentActual, codigoSecreto);
-    logTerminal("Te quedan " + intentosDisponibles + " intentos.");
-    if (intentosDisponibles === 0) { ////////
+
+    // --- CORRECCIÓN AQUÍ: Comprobamos si el jugador ha ganado o perdido ---
+    const estadoJuego = comprobarFinDeJuego(pistasActuales, intentosDisponibles);
+
+    if (estadoJuego === 'victoria') {
+        // Si sale victoria, avisamos por la terminal y bloqueamos el botón
+        logTerminal("¡SISTEMA HACKEADO! ACCESO CONCEDIDO", "success");
+        botonEnviar.disabled = true;
+        botonEnviar.innerText = "ACCESO TOTAL";
+    } else if (estadoJuego === 'derrota') {
+        // Si perdemos, damos error y mostramos cuál era el código secreto
+        logTerminal("SISTEMA BLOQUEADO: Te has quedado sin intentos.", "error");
+        logTerminal("El código era: " + codigoSecreto.join(''), "error");
         botonEnviar.disabled = true;
         botonEnviar.innerText = "BLOQUEADO";
+    } else {
+        // Reutilizo la funcion e informamos por la terminal cuántas vidas quedan
+        logTerminal("Te quedan " + intentosDisponibles + " intentos.");
     }
 });
+
 //PARTE JOSEP (feature-game-engine)
 // FUNCIÓN 1: Generar un código secreto aleatorio de 4 dígitos
 function generarCodigoAleatorio() {
@@ -97,6 +122,7 @@ function comprobarFinDeJuego(pistas, intentosRestantes) {
     }
     return 'continuar';
 }
+
 
 
 
