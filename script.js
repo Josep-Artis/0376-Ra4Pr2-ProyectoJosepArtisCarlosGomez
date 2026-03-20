@@ -27,6 +27,13 @@ function logTerminal(missatge, tipus = '') {
 logTerminal("SISTEMA OPERATIVO INICIALIZADO", "success");
 const botonEnviar = document.getElementById('btn-enviar');
 
+// Creacion de una nueva función para resetear los selectores a 0 después de cada intento
+function resetearInterfaz() {
+    selects.forEach(select => {
+        select.value = 0; 
+    });
+}
+
 // aqui le decimos qué hacer cuando alguien haga clic en el boton
 botonEnviar.addEventListener('click', () => {
     // Aqui leemos los 4 selects y guardamos sus valores en un Array
@@ -35,7 +42,7 @@ botonEnviar.addEventListener('click', () => {
 
     // CORRECCIÓN AQUÍ: Guardamos las pistas que genera Josep ---
     const pistasActuales = validarIntento(intentActual, codigoSecreto);
-    // MAqui mostramos las pistas (1, Ø, ×) en la terminal
+    // Aqui mostramos las pistas (1, Ø, ×) en la terminal
     logTerminal("Pistas: " + pistasActuales.join(' '));
 
     // Aqui restamos uno al contador de intentos cada vez que se hace clic
@@ -58,12 +65,15 @@ botonEnviar.addEventListener('click', () => {
     } else if (estadoJuego === 'derrota') {
         // Si perdemos, damos error y mostramos cuál era el código secreto
         logTerminal("SISTEMA BLOQUEADO: Te has quedado sin intentos.", "error");
-        logTerminal("El código era: " + codigoSecreto.join(''), "error");
+        logTerminal("El código era: " + codigoSecreto.join('-'), "error");
         botonEnviar.disabled = true;
         botonEnviar.innerText = "BLOQUEADO";
     } else {
         // Reutilizo la funcion e informamos por la terminal cuántas vidas quedan
         logTerminal("Te quedan " + intentosDisponibles + " intentos.");
+        
+        // Ejecutamos la limpieza de los selectores para la siguiente jugada
+        resetearInterfaz();
     }
 });
 
