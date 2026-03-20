@@ -1,6 +1,6 @@
 //PARTE CARLOS (feature-ui-logic)
-
-let intentosDisponibles = 5;
+const MAX_INTENTOS = 5;
+let intentosDisponibles = MAX_INTENTOS;
 // Seleccionamos los 4 elementos (code-input) que estan en el html
 const selects = document.querySelectorAll('.code-input');
 // Recorremos cada selector para añadirle las opciones del 0 al 9
@@ -90,7 +90,7 @@ function generarCodigoAleatorio() {
 // Al cargar la página se genera el código secreto
 const codigoSecreto = generarCodigoAleatorio();
 // Quitar antes de entregar: muestra el código en consola para pruebas
-console.log("Codigo secreto:", codigoSecreto);
+//console.log("Codigo secreto:", codigoSecreto);
 
 // FUNCIÓN 2: Algoritmo de validación (dos pasadas)
 function validarIntento(intentoUsuario, codigoSecreto) {
